@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Target, Lightbulb, Rocket, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
+import { Target, Lightbulb, Rocket, RefreshCw, AlertCircle, CheckCircle, type LucideIcon } from 'lucide-react';
 
-const CampaignGoalStep = ({ selectedGoal, setSelectedGoal }) => {
+interface CampaignGoalStepProps {
+  selectedGoal: string | null;
+  setSelectedGoal: (goal: string) => void;
+}
+
+interface GoalType {
+  id: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+  borderColor: string;
+  bgColor: string;
+}
+
+const CampaignGoalStep = ({ selectedGoal, setSelectedGoal }: CampaignGoalStepProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [userId, setUserId] = useState(null);
-  const [campaignId, setCampaignId] = useState(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [campaignId, setCampaignId] = useState<string | null>(null);
 
   // Get token from localStorage
   useEffect(() => {
@@ -25,7 +40,7 @@ const CampaignGoalStep = ({ selectedGoal, setSelectedGoal }) => {
     }
   }, []);
 
-  const goals = [
+  const goals: GoalType[] = [
     {
       id: 'awareness',
       title: 'Brand Awareness',
@@ -64,7 +79,7 @@ const CampaignGoalStep = ({ selectedGoal, setSelectedGoal }) => {
     }
   ];
 
-  const sendGoalToBackend = async (goalId) => {
+  const sendGoalToBackend = async (goalId: string) => {
     if (!userId) {
       setError('User ID not found. Please login again.');
       return;
@@ -84,7 +99,7 @@ const CampaignGoalStep = ({ selectedGoal, setSelectedGoal }) => {
         },
         body: JSON.stringify({ 
           goal: goalId,
-          user_id: userId  // Pass the token as user_id (it's already a string)
+          user_id: userId
         })
       });
 
@@ -111,7 +126,7 @@ const CampaignGoalStep = ({ selectedGoal, setSelectedGoal }) => {
     }
   };
 
-  const handleGoalSelect = (goalId) => {
+  const handleGoalSelect = (goalId: string) => {
     sendGoalToBackend(goalId);
   };
 
