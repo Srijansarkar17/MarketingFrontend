@@ -85,6 +85,11 @@ const Navigation: React.FC = () => {
     navigate('/');
   };
 
+  // Wrapper function for NavItems onItemClick
+  const handleNavItemClick = (link: string) => {
+    navigate(link);
+  };
+
   return (
     <Navbar>
       {/* Desktop Navigation */}
@@ -93,7 +98,7 @@ const Navigation: React.FC = () => {
         {isLoggedIn && (
           <NavItems 
             items={navItems} 
-            onItemClick={(link) => navigate(link)}
+            onItemClick={handleNavItemClick}
           />
         )}
         <div className="flex items-center gap-4">

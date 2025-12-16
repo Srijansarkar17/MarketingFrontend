@@ -1,12 +1,9 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ProtectedRoute, PublicRoute } from './components/ProtectedRoute';
-import CommandCenter from './pages/CommandCenter';
+import {  PublicRoute } from './components/ProtectedRoute';
 import LoginPage from './pages/Login';
 import SignUpPage from './pages/Signup';
 import Home from './pages/Home';
-import OnboardingPage from './components/OnBoarding';
-import AutoCreate from './pages/AutoCreate';
+
 
 function App() {
   return (
@@ -37,43 +34,9 @@ function App() {
           } 
         />
 
-        {/* ONBOARDING ROUTE - Protected, shows after signup */}
-        <Route 
-          path="/onboarding" 
-          element={
-            <ProtectedRoute>
-              <OnboardingPage />
-            </ProtectedRoute>
-          } 
-        />
 
         {/* PROTECTED ROUTES - Require authentication */}
-        <Route 
-          path="/command-center" 
-          element={
-            <ProtectedRoute>
-              <CommandCenter />
-            </ProtectedRoute>
-          } 
-        />
-        
-        {/* Alias for command-center */}
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <CommandCenter />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/auto-create" 
-          element={
-            <ProtectedRoute>
-              <AutoCreate />
-            </ProtectedRoute>
-          } 
-        />
+      
 
         {/* Add more protected routes here as needed */}
         {/* 

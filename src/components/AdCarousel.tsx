@@ -7,7 +7,7 @@ interface AdCarouselProps {
   onCardClick: (ad: any) => void; // Add onCardClick prop
 }
 
-const AdCarousel: React.FC<AdCarouselProps> = ({ category, onCardClick }) => {
+const AdCarousel: React.FC<AdCarouselProps> = ({ onCardClick }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const ads = [
