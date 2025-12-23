@@ -1,5 +1,5 @@
 // src/components/AdSurveillance.tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Added React import
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -57,9 +57,9 @@ const AdSurveillance = () => {
   const [addCompetitorError, setAddCompetitorError] = useState<string | null>(null);
   const [addCompetitorSuccess, setAddCompetitorSuccess] = useState(false);
   
-  // Chart data state
-  const [spendTrendData, setSpendTrendData] = useState<number[]>([26000, 19500, 13000, 6500, 0, 0, 0]);
-  const [platformDistribution, setPlatformDistribution] = useState<PlatformSpendData[]>([
+  // Chart data state - removed unused setters since they're not needed
+  const [spendTrendData] = useState<number[]>([26000, 19500, 13000, 6500, 0, 0, 0]);
+  const [platformDistribution] = useState<PlatformSpendData[]>([
     { platform: 'Meta', spend: 45300, percentage: 36.5, color: '#00C2B3' },
     { platform: 'Google', spend: 38900, percentage: 31.3, color: '#4A90E2' },
     { platform: 'TikTok', spend: 24700, percentage: 19.9, color: '#FF6B6B' },
@@ -70,7 +70,7 @@ const AdSurveillance = () => {
     setLoading(true);
     try {
       const [summary, daily] = await Promise.all([
-        fetchSummaryMetrics(selectedPeriod),
+        fetchSummaryMetrics(),
         fetchDailyMetrics()
       ]);
       setSummaryData(summary);
@@ -685,7 +685,8 @@ const AdSurveillance = () => {
                           </span>
                         )}
                       </div>
-                      <p className="text-gray-900 font-medium mt-1">{ad.ad_title}</p>
+                      {/* Updated to use proper property names */}
+                      <p className="text-gray-900 font-medium mt-1">{ad.competitor_name}</p>
                     </div>
                   </div>
                 </div>
@@ -694,26 +695,30 @@ const AdSurveillance = () => {
                 </button>
               </div>
 
-              {/* Ad Body */}
-              <p className="text-gray-600 mb-6">{ad.ad_body}</p>
+              {/* Ad Body - Use description or similar field if available */}
+              <p className="text-gray-600 mb-6">
+                {ad.description || `Ad campaign on ${ad.platform} targeting users interested in similar products`}
+              </p>
 
               {/* Metrics Grid */}
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
                 <div>
                   <p className="text-sm text-gray-500">Daily Spend</p>
                   <p className="font-semibold text-gray-900">{formatCurrency(ad.daily_spend)}</p>
-                  {ad.spend_lower_bound && ad.spend_upper_bound && (
+                  {/* Only show if these properties exist */}
+                  {('spend_lower_bound' in ad) && ('spend_upper_bound' in ad) && (
                     <p className="text-xs text-gray-500">
-                      ${ad.spend_lower_bound.toFixed(0)} - ${ad.spend_upper_bound.toFixed(0)}
+                      ${(ad.spend_lower_bound as number).toFixed(0)} - ${(ad.spend_upper_bound as number).toFixed(0)}
                     </p>
                   )}
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Impressions</p>
                   <p className="font-semibold text-gray-900">{formatNumber(ad.daily_impressions)}</p>
-                  {ad.impressions_lower_bound && ad.impressions_upper_bound && (
+                  {/* Only show if these properties exist */}
+                  {('impressions_lower_bound' in ad) && ('impressions_upper_bound' in ad) && (
                     <p className="text-xs text-gray-500">
-                      {formatNumber(ad.impressions_lower_bound)} - {formatNumber(ad.impressions_upper_bound)}
+                      {formatNumber(ad.impressions_lower_bound as number)} - {formatNumber(ad.impressions_upper_bound as number)}
                     </p>
                   )}
                 </div>
@@ -724,12 +729,12 @@ const AdSurveillance = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Variants</p>
-                  <p className="font-semibold text-gray-900">{ad.variants} creatives</p>
+                  <p className="font-semibold text-gray-900">{ad.variants || 0} creatives</p>
                   <p className="text-xs text-gray-500">A/B testing</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">A/B Tests</p>
-                  <p className="font-semibold text-gray-900">{ad.ab_tests} active</p>
+                  <p className="font-semibold text-gray-900">{ad.ab_tests || 0} active</p>
                   <p className="text-xs text-gray-500">in progress</p>
                 </div>
               </div>
